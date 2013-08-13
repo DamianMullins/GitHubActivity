@@ -18,7 +18,7 @@
         
         function friendlyDate() {
             var commitDate = activity.created_at,
-                jsDate = new Date(commitDate), 
+                jsDate = new Date(commitDate),
                 timeText = settings.enableMomentDates ? moment(jsDate).fromNow() : jsDate.toDateString();
             
             return $('<time/>', {datetime: commitDate, title: commitDate, text: timeText});
@@ -48,7 +48,7 @@
             var ref = activity.payload.ref,
                 branch = ref.substring(ref.lastIndexOf('/') + 1, ref.length),
                 branchAnchor = $('<a/>', {href: activity.repository.url + '/tree/' + branch, text: branch}),
-                payloadAnchor = '',
+                payloadAnchor,
                 ul = $('<ul/>');
                     
             $.each(activity.payload.shas, function (i, sha) {
