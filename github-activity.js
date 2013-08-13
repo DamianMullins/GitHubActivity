@@ -90,7 +90,8 @@
             return $('<li/>')
                 .append(activity.payload.action + 'd gist:')
                 .append(gistAnchor)
-                .append('.');
+                .append(' - ')
+                .append(friendlyDate());
         }
         
         function template() {
