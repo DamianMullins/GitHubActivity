@@ -3,7 +3,7 @@
  * Damian Mullins, August 2013
  */
 
-(function ($) {
+;(function ($, window, document, undefined) {
     "use strict";
     
     $.fn.GitHubActivity = function (options) {
@@ -133,4 +133,4 @@
         showWatchEvents: true,
         showGistEvents: true
     };
-}(jQuery));
+}(jQuery, window, document));
