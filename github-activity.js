@@ -82,7 +82,9 @@
         function watch() {
             return $('<li/>')
                 .append('Watched ')
-                .append(repositoryAnchor());
+                .append(repositoryAnchor())
+                .append(' - ')
+                .append(friendlyDate());
         }
         
         function gist() {
