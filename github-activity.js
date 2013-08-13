@@ -9,8 +9,8 @@
     $.fn.GitHubActivity = function (options) {
         var settings = $.extend({}, $.fn.GitHubActivity.defaults, options);
         
-        function friendlyDate(commit) {
-            var commitDate = commit.repository.pushed_at,
+        function friendlyDate(repo) {
+            var commitDate = repo.pushed_at,
                 jsDate = new Date(commitDate);
             
             if (settings.enableMomentDates) {
@@ -30,8 +30,7 @@
                     .append('Created repository ')
                     .append(repoAnchor)
                     .append(' - ')
-                    .append(friendlyDate(commit));
-                break;
+                    .append(friendlyDate(commit.repository));
             case 'branch':
                 branchAnchor = $('<a/>', {href: commit.repository.url + '/tree/' + commit.payload.ref, text: commit.payload.ref});
                 return $('<li/>')
@@ -40,7 +39,7 @@
                     .append(' at ')
                     .append(repoAnchor)
                     .append(' - ')
-                    .append(friendlyDate(commit));
+                    .append(friendlyDate(commit.repository));
             }
         }
     
@@ -74,7 +73,7 @@
                 .append(' at ')
                 .append(repoAnchor)
                 .append(' - ')
-                .append(friendlyDate(commit))
+                .append(friendlyDate(commit.repository))
                 .append(ul);
         }
         
