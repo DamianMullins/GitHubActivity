@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Activity</title>
+</head>
+
+<body>
+    <ul class="github-activity"></ul>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="../github-activity.js"></script>
+    <script>
+        $(function() {
+            $('.github-activity').GitHubActivity({username: 'damianmullins'});
+        });
+    </script>
+</body>
+</html>
