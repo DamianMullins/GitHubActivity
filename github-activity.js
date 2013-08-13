@@ -117,7 +117,6 @@
             
             $.getJSON(url, {}, function (data) {
                 $.each(data.slice(0, limit), function (index, commit) {
-                    console.log(commit);
                     self.append(template(commit));
                 });
             });
@@ -132,7 +131,6 @@
         showCreateEvents: true,
         showPushEvents: true,
         showWatchEvents: true,
-        showGistEvents: true,
-        test: false
+        showGistEvents: true
     };
 }(jQuery));
