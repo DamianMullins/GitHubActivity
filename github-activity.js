@@ -24,7 +24,15 @@
                 repoAnchor = $('<a/>', {href: commit.repository.url, text: commit.repository.owner + '/' + commit.repository.name});
             
             switch (commit.payload.ref_type) {
-            case "branch":
+            case 'repository':
+                repoAnchor = $('<a/>', {href: commit.repository.url, text: commit.repository.name});
+                return $('<li/>')
+                    .append('Created repository ')
+                    .append(repoAnchor)
+                    .append(' - ')
+                    .append(friendlyDate(commit));
+                break;
+            case 'branch':
                 branchAnchor = $('<a/>', {href: commit.repository.url + '/tree/' + commit.payload.ref, text: commit.payload.ref});
                 return $('<li/>')
                     .append('Created branch ')
