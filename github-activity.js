@@ -7,15 +7,17 @@
     "use strict";
     
     $.fn.GitHubActivity = function (options) {
-        var settings = $.extend({}, $.fn.GitHubActivity.defaults, options);
+        var settings = $.extend({}, $.fn.GitHubActivity.defaults, options),
+            activity = {};
         
-        function repositoryAnchor(repo, withPrefix) {
-            var anchorText = (withPrefix === true ? repo.owner + '/' : '') + repo.name;
+        function repositoryAnchor(withPrefix) {
+            var repo = activity.repository,
+                anchorText = (withPrefix === true ? repo.owner + '/' : '') + repo.name;
             return $('<a/>', {href: repo.url, text: anchorText});
         }
         
-        function friendlyDate(repo) {
-            var commitDate = repo.pushed_at,
+        function friendlyDate() {
+            var commitDate = activity.repository.pushed_at,
                 jsDate = new Date(commitDate);
             
             if (settings.enableMomentDates) {
@@ -24,36 +26,36 @@
             return jsDate.toDateString();
         }
         
-        function create(commit) {
-            switch (commit.payload.ref_type) {
+        function create() {
+            switch (activity.payload.ref_type) {
             case 'repository':
                 return $('<li/>')
                     .append('Created repository ')
-                    .append(repositoryAnchor(commit.repository))
+                    .append(repositoryAnchor())
                     .append(' - ')
-                    .append(friendlyDate(commit.repository));
+                    .append(friendlyDate());
             case 'branch':
-                var branchAnchor = $('<a/>', {href: commit.repository.url + '/tree/' + commit.payload.ref, text: commit.payload.ref});
+                var branchAnchor = $('<a/>', {href: activity.repository.url + '/tree/' + activity.payload.ref, text: activity.payload.ref});
                 return $('<li/>')
                     .append('Created branch ')
                     .append(branchAnchor)
                     .append(' at ')
-                    .append(repositoryAnchor(commit.repository, true))
+                    .append(repositoryAnchor(true))
                     .append(' - ')
-                    .append(friendlyDate(commit.repository));
+                    .append(friendlyDate());
             }
         }
     
-        function push(commit) {
-            var ref = commit.payload.ref,
+        function push() {
+            var ref = activity.payload.ref,
                 branch = ref.substring(ref.lastIndexOf('/') + 1, ref.length),
-                branchAnchor = $('<a/>', {href: commit.repository.url + '/tree/' + branch, text: branch}),
+                branchAnchor = $('<a/>', {href: activity.repository.url + '/tree/' + branch, text: branch}),
                 payloadAnchor = '',
                 ul = $('<ul/>');
                     
-            $.each(commit.payload.shas, function (i, sha) {
+            $.each(activity.payload.shas, function (i, sha) {
                 var shortSha = sha[0].substring(0, 6),
-                    shaAnchor = $('<a/>', {href: commit.repository.url + '/commit/' + sha[0], text: shortSha}),
+                    shaAnchor = $('<a/>', {href: activity.repository.url + '/commit/' + sha[0], text: shortSha}),
                     li = $('<li/>').append(shaAnchor)
                         .append(' ')
                         .append(sha[2])
@@ -63,7 +65,7 @@
             });
             
             if (settings.showPushComparisonLinks) {
-                payloadAnchor = $('<a/>', {href: commit.url, text: 'View comparison for these ' + commit.payload.shas.length + ' commits'});
+                payloadAnchor = $('<a/>', {href: activity.url, text: 'View comparison for these ' + activity.payload.shas.length + ' commits'});
                 ul.append($('<li/>').append(payloadAnchor));
             }
                 
@@ -71,46 +73,46 @@
                 .append('Pushed to ')
                 .append(branchAnchor)
                 .append(' at ')
-                .append(repositoryAnchor(commit.repository, true))
+                .append(repositoryAnchor(true))
                 .append(' - ')
-                .append(friendlyDate(commit.repository))
+                .append(friendlyDate())
                 .append(ul);
         }
         
-        function watch(commit) {
+        function watch() {
             return $('<li/>')
                 .append('Watched ')
-                .append(repositoryAnchor(commit.repository));
+                .append(repositoryAnchor());
         }
         
-        function gist(commit) {
-            var gistAnchor = $('<a/>', {href: commit.payload.url, text: commit.payload.desc});
+        function gist() {
+            var gistAnchor = $('<a/>', {href: activity.payload.url, text: activity.payload.desc});
             return $('<li/>')
-                .append(commit.payload.action + 'd gist:')
+                .append(activity.payload.action + 'd gist:')
                 .append(gistAnchor)
                 .append('.');
         }
         
-        function template(commit) {
-            switch (commit.type) {
+        function template() {
+            switch (activity.type) {
             case "CreateEvent":
                 if (settings.showCreateEvents) {
-                    return create(commit);
+                    return create();
                 }
                 break;
             case "PushEvent":
                 if (settings.showPushEvents) {
-                    return push(commit);
+                    return push();
                 }
                 break;
             case "WatchEvent":
                 if (settings.showWatchEvents) {
-                    return watch(commit);
+                    return watch();
                 }
                 break;
             case "GistEvent":
                 if (settings.showGistEvents) {
-                    return gist(commit);
+                    return gist();
                 }
                 break;
             }
@@ -123,7 +125,8 @@
             
             $.getJSON(url, {}, function (data) {
                 $.each(data.slice(0, limit), function (index, commit) {
-                    self.append(template(commit));
+                    activity = commit;
+                    self.append(template());
                 });
             });
         });
