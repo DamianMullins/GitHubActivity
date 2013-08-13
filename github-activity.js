@@ -9,6 +9,11 @@
     $.fn.GitHubActivity = function (options) {
         var settings = $.extend({}, $.fn.GitHubActivity.defaults, options);
         
+        function repositoryAnchor(repo, withPrefix) {
+            var anchorText = (withPrefix === true ? repo.owner + '/' : '') + repo.name;
+            return $('<a/>', {href: repo.url, text: anchorText});
+        }
+        
         function friendlyDate(repo) {
             var commitDate = repo.pushed_at,
                 jsDate = new Date(commitDate);
@@ -20,24 +25,20 @@
         }
         
         function create(commit) {
-            var branchAnchor = '',
-                repoAnchor = $('<a/>', {href: commit.repository.url, text: commit.repository.owner + '/' + commit.repository.name});
-            
             switch (commit.payload.ref_type) {
             case 'repository':
-                repoAnchor = $('<a/>', {href: commit.repository.url, text: commit.repository.name});
                 return $('<li/>')
                     .append('Created repository ')
-                    .append(repoAnchor)
+                    .append(repositoryAnchor(commit.repository))
                     .append(' - ')
                     .append(friendlyDate(commit.repository));
             case 'branch':
-                branchAnchor = $('<a/>', {href: commit.repository.url + '/tree/' + commit.payload.ref, text: commit.payload.ref});
+                var branchAnchor = $('<a/>', {href: commit.repository.url + '/tree/' + commit.payload.ref, text: commit.payload.ref});
                 return $('<li/>')
                     .append('Created branch ')
                     .append(branchAnchor)
                     .append(' at ')
-                    .append(repoAnchor)
+                    .append(repositoryAnchor(commit.repository, true))
                     .append(' - ')
                     .append(friendlyDate(commit.repository));
             }
@@ -47,7 +48,6 @@
             var ref = commit.payload.ref,
                 branch = ref.substring(ref.lastIndexOf('/') + 1, ref.length),
                 branchAnchor = $('<a/>', {href: commit.repository.url + '/tree/' + branch, text: branch}),
-                repoAnchor = $('<a/>', {href: commit.repository.url, text: commit.repository.owner + '/' + commit.repository.name}),
                 payloadAnchor = '',
                 ul = $('<ul/>');
                     
@@ -71,17 +71,16 @@
                 .append('Pushed to ')
                 .append(branchAnchor)
                 .append(' at ')
-                .append(repoAnchor)
+                .append(repositoryAnchor(commit.repository, true))
                 .append(' - ')
                 .append(friendlyDate(commit.repository))
                 .append(ul);
         }
         
         function watch(commit) {
-            var repoAnchor = $('<a/>', {href: commit.repository.url, text: commit.repository.name});
             return $('<li/>')
                 .append('Watched ')
-                .append(repoAnchor);
+                .append(repositoryAnchor(commit.repository));
         }
         
         function gist(commit) {
