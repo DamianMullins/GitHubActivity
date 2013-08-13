@@ -17,7 +17,7 @@
         }
         
         function friendlyDate() {
-            var commitDate = activity.repository.pushed_at,
+            var commitDate = activity.created_at,
                 jsDate = new Date(commitDate);
             
             if (settings.enableMomentDates) {
