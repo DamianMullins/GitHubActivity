@@ -56,8 +56,7 @@
                     shaAnchor = $('<a/>', {href: activity.repository.url + '/commit/' + sha[0], text: shortSha}),
                     li = $('<li/>').append(shaAnchor)
                         .append(' ')
-                        .append(sha[2])
-                        .append('.');
+                        .append(sha[2]);
                 
                 ul.append(li);
             });
