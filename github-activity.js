@@ -6,13 +6,29 @@
 ;(function ($, window, document, undefined) {
     "use strict";
     
+    var settings;
+    
     $.fn.GitHubActivity = function (options) {
-        var settings = $.extend({}, $.fn.GitHubActivity.defaults, options),
-            activity = {};
+        settings = $.extend({}, $.fn.GitHubActivity.defaults, options);
         
+        return this.each(function () {
+            var self = $(this),
+                url = 'https://github.com/' + settings.username + '.json?callback=?',
+                limit = settings.items || 10;
+            
+            $.getJSON(url, {}, function (data) {
+                $.each(data.slice(0, limit), function (index, commit) {
+                    self.append($.fn.GitHubActivity.template(commit));
+                });
+            });
+        });
+    };
+    
+    $.fn.GitHubActivity.template = function (activity) {
         function repositoryAnchor(withPrefix) {
             var repo = activity.repository,
                 anchorText = (withPrefix === true ? repo.owner + '/' : '') + repo.name;
+            
             return $('<a/>', {href: repo.url, text: anchorText});
         }
         
@@ -93,43 +109,28 @@
                 .append(friendlyDate());
         }
         
-        function template() {
-            switch (activity.type) {
-            case "CreateEvent":
-                if (settings.showCreateEvents) {
-                    return create();
-                }
-                break;
-            case "PushEvent":
-                if (settings.showPushEvents) {
-                    return push();
-                }
-                break;
-            case "WatchEvent":
-                if (settings.showWatchEvents) {
-                    return watch();
-                }
-                break;
-            case "GistEvent":
-                if (settings.showGistEvents) {
-                    return gist();
-                }
-                break;
+        switch (activity.type) {
+        case "CreateEvent":
+            if (settings.showCreateEvents) {
+                return create();
             }
+            break;
+        case "PushEvent":
+            if (settings.showPushEvents) {
+                return push();
+            }
+            break;
+        case "WatchEvent":
+            if (settings.showWatchEvents) {
+                return watch();
+            }
+            break;
+        case "GistEvent":
+            if (settings.showGistEvents) {
+                return gist();
+            }
+            break;
         }
-        
-        return this.each(function () {
-            var self = $(this),
-                url = 'https://github.com/' + settings.username + '.json?callback=?',
-                limit = settings.items || 10;
-            
-            $.getJSON(url, {}, function (data) {
-                $.each(data.slice(0, limit), function (index, commit) {
-                    activity = commit;
-                    self.append(template());
-                });
-            });
-        });
     };
     
     $.fn.GitHubActivity.defaults = {
