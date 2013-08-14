@@ -1,10 +1,9 @@
-GitHub Activity
-==============
+# GitHub Activity
 
 A customizable jQuery plugin to display your latest GitHub activity.
 
 
-### Getting started
+## Getting started
 
 1.  Include jQuery & github-activity on your page before the closing ``</body>`` tag
 
@@ -20,3 +19,15 @@ A customizable jQuery plugin to display your latest GitHub activity.
       $('ul#github-activity').GitHubActivity({username: 'damianmullins'});
     });
     ```
+    
+    
+## To do
+
+- Create configuration section
+- Use versioning & tags
+- Create GitHub pages site
+
+
+## Author
+
+[Damian Mullins](http://lowflyingowls.co.uk) ([@DJMelonz](http://twitter.com/djmelonz))
