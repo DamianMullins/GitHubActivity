@@ -4,7 +4,7 @@
  */
 
 ;(function ($, window, document, undefined) {
-    "use strict";
+    'use strict';
     
     var settings;
     
@@ -114,22 +114,22 @@
         }
         
         switch (activity.type) {
-        case "CreateEvent":
+        case 'CreateEvent':
             if (settings.showCreateEvents) {
                 return create();
             }
             break;
-        case "PushEvent":
+        case 'PushEvent':
             if (settings.showPushEvents) {
                 return push();
             }
             break;
-        case "WatchEvent":
+        case 'WatchEvent':
             if (settings.showWatchEvents) {
                 return watch();
             }
             break;
-        case "GistEvent":
+        case 'GistEvent':
             if (settings.showGistEvents) {
                 return gist();
             }
