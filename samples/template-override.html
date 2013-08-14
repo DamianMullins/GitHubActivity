@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Activity</title>
+</head>
+
+<body>
+    <ul class="github-activity"></ul>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+    <script src="../github-activity.js"></script>
+    <script>
+        var compiled;
+        
+        $.fn.GitHubActivity.template = function(activity) {
+            return compiled(activity);
+        };
+        
+        $(function() {
+            compiled = _.template($('#template').html());            
+            $('.github-activity').GitHubActivity({username: 'damianmullins'});
+        });
+    </script>
+    <script type="text/template" id="template">
+        <li>
+            <%var pushedAt = new Date(created_at);%>
+            <%if (type == 'CreateEvent') {%>
+                Created 
+                <%if (payload.ref_type == 'repository') {%>
+                    repository <a href="<%=repository.url%>"><%=repository.name%></a>
+                <%} else if (payload.ref_type == 'branch') {%>
+                    branch
+                    <a href="<%=repository.url%>/tree/<%=payload.ref%>"><%=payload.ref%></a> at 
+                    <a href="<%=repository.url%>"><%=repository.owner%>/<%=repository.name%></a>
+                <%}%> - 
+                <time datetime="<%print(pushedAt);%>" title="<%print(pushedAt);%>">
+                    <%print(pushedAt.toDateString());%>
+                </time>
+            <%} else if (type == 'PushEvent') {%>
+                <%var branch = payload.ref.substring(payload.ref.lastIndexOf('/') + 1, payload.ref.length)%>
+                Pushed to
+                <a href="<%=repository.url%>/tree/<%=branch%>"><%=branch%></a> at 
+                <a href="<%=repository.url%>"><%=repository.owner%>/<%=repository.name%></a> - 
+                <time datetime="<%print(pushedAt);%>" title="<%print(pushedAt);%>">
+                    <%print(pushedAt.toDateString());%>
+                </time>
+                <ul>
+                    <%_.each(payload.shas, function(sha) {%>
+                        <li>
+                            <a href="<%=repository.url%>/commit/<%=sha[0]%>"><%=sha[0].substring(0,6)%></a>
+                            <%=sha[2]%>
+                        </li>
+                    <%});%>
+                </ul>
+            <%} else if (type == 'WatchEvent') {%>
+                 Watched <a href="<%=repository.url%>"><%=repository.name%></a> - 
+                <time datetime="<%print(pushedAt);%>" title="<%print(pushedAt);%>">
+                    <%print(pushedAt.toDateString());%>
+                </time>
+            <%} else if (type == 'GistEvent') {%>
+                <%=payload.action%>d gist: <a href="<%=payload.url%>"><%=payload.desc%></a> - 
+                <time datetime="<%print(pushedAt);%>" title="<%print(pushedAt);%>">
+                    <%print(pushedAt.toDateString());%>
+                </time>
+            <%}%>
+        </li>
+    </script>
+</body>
+</html>
