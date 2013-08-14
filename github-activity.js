@@ -41,23 +41,27 @@
         }
         
         function create() {
+            var li,
+                branchAnchor;
+            
             switch (activity.payload.ref_type) {
             case 'repository':
-                return $('<li/>')
+                li = $('<li/>')
                     .append('Created repository ')
-                    .append(repositoryAnchor())
-                    .append(' - ')
-                    .append(friendlyDate());
+                    .append(repositoryAnchor());
+                break;
             case 'branch':
-                var branchAnchor = $('<a/>', {href: activity.repository.url + '/tree/' + activity.payload.ref, text: activity.payload.ref});
-                return $('<li/>')
+                branchAnchor = $('<a/>', {href: activity.repository.url + '/tree/' + activity.payload.ref, text: activity.payload.ref});
+                li = $('<li/>')
                     .append('Created branch ')
                     .append(branchAnchor)
                     .append(' at ')
-                    .append(repositoryAnchor(true))
-                    .append(' - ')
-                    .append(friendlyDate());
+                    .append(repositoryAnchor(true));
+                break;
             }
+            
+            return li.append(' - ')
+                .append(friendlyDate());
         }
     
         function push() {
