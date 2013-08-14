@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Activity</title>
+</head>
+
+<body>
+    <ul class="github-activity"></ul>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="../github-activity.js"></script>
+    <script>
+        // These need only be called once and do not have to be called from within a "ready" block
+        $.fn.GitHubActivity.defaults.username = 'damianmullins';
+        $.fn.GitHubActivity.defaults.showPushComparisonLinks = false;
+        
+        $(function() {            
+            $('.github-activity').GitHubActivity();
+        });
+    </script>
+</body>
+</html>
