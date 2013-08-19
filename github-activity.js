@@ -42,7 +42,8 @@
         
         function create() {
             var li,
-                branchAnchor;
+                branchAnchor,
+                tagAnchor;
             
             switch (activity.payload.ref_type) {
             case 'repository':
@@ -55,6 +56,14 @@
                 li = $('<li/>')
                     .append('Created branch ')
                     .append(branchAnchor)
+                    .append(' at ')
+                    .append(repositoryAnchor(true));
+                break;
+            case 'tag':
+                tagAnchor = $('<a/>', {href: activity.url, text: activity.payload.ref});
+                li = $('<li/>')
+                    .append('Created tag ')
+                    .append(tagAnchor)
                     .append(' at ')
                     .append(repositoryAnchor(true));
                 break;
