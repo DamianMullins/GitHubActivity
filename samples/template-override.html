@@ -33,6 +33,10 @@
                     branch
                     <a href="<%=repository.url%>/tree/<%=payload.ref%>"><%=payload.ref%></a> at 
                     <a href="<%=repository.url%>"><%=repository.owner%>/<%=repository.name%></a>
+                <%} else if (payload.ref_type == 'tag') {%>
+                    tag
+                    <a href="<%=url%>"><%=payload.ref%></a> at 
+                    <a href="<%=repository.url%>"><%=repository.owner%>/<%=repository.name%></a>
                 <%}%> - 
                 <time datetime="<%print(pushedAt);%>" title="<%print(pushedAt);%>">
                     <%print(pushedAt.toDateString());%>
