@@ -3,7 +3,7 @@
  * Damian Mullins, August 2013
  */
 
-;(function ($, window, document, undefined) {
+;(function ($, window, undefined) {
     'use strict';
     
     var settings;
@@ -156,4 +156,4 @@
         showWatchEvents: true,
         showGistEvents: true
     };
-}(jQuery, window, document));
+}(jQuery, window));
