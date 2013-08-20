@@ -1,9 +1,9 @@
 /**
- * Github activity feed
- * Damian Mullins, August 2013
+ * Github activity feed v1.0.0-alpha
+ * http://lowflyingowls.co.uk
  */
-
-;(function ($, window, undefined) {
+;
+(function ($, window, undefined) {
     'use strict';
     
     var settings;
