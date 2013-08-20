@@ -35,7 +35,8 @@
         function friendlyDate() {
             var commitDate = activity.created_at,
                 jsDate = new Date(commitDate),
-                timeText = settings.enableMomentDates ? moment(jsDate).fromNow() : jsDate.toDateString();
+                momentDates = (settings.enableMomentDates && typeof (moment) === "function"),
+                timeText = momentDates ? moment(jsDate).fromNow() : jsDate.toDateString();
             
             return $('<time/>', {datetime: commitDate, title: commitDate, text: timeText});
         }
